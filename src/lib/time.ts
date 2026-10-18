@@ -1,3 +1,6 @@
+// Safari has no native Temporal yet; this uses the native one where it exists.
+import "temporal-polyfill/global"
+
 export type ClockTime = { hours: number; minutes: number; seconds: number }
 
 export type HandAngles = { hour: number; minute: number; second: number }

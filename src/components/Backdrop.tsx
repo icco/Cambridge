@@ -36,6 +36,8 @@ export function Backdrop() {
         <div className={styles.field} />
         <div className={styles.field} />
         <div className={styles.field} />
+        <div className={styles.field} />
+        <div className={styles.field} />
       </div>
       {day !== null && (
         <div

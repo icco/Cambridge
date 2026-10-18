@@ -13,16 +13,24 @@
   inset: -20%;
 }
 
-/* Soft edges come from gradients, not filter: blur, to keep the Pi GPU idle. */
+/* Soft edges come from gradients, not filter: blur, and only transform and opacity animate, to keep the Pi GPU idle. */
 .field {
+  --o: 1;
   position: absolute;
   border-radius: 50%;
-  will-change: transform;
-  animation: drift var(--duration) ease-in-out infinite alternate;
+  opacity: var(--o);
+  will-change: transform, opacity;
+  animation-name: flow-a, breathe;
+  animation-duration: var(--duration), var(--breath);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 .field:nth-child(1) {
-  --duration: 290s;
+  animation-name: flow-a, breathe;
+  --duration: 70s;
+  --breath: 19s;
   top: 2%;
   left: -5%;
   width: calc(75 * var(--u));
@@ -31,56 +39,176 @@
 }
 
 .field:nth-child(2) {
-  --duration: 410s;
+  animation-name: flow-b, breathe;
+  --duration: 95s;
+  --breath: 27s;
+  --o: 0.55;
   top: 18%;
   left: 50%;
   width: calc(90 * var(--u));
   height: calc(90 * var(--u));
   background: radial-gradient(circle, var(--field-b) 0%, transparent 66%);
-  opacity: 0.55;
-  animation-delay: -120s;
+  animation-delay:
+    -40s,
+    -9s;
 }
 
 .field:nth-child(3) {
-  --duration: 350s;
+  animation-name: flow-c, breathe;
+  --duration: 82s;
+  --breath: 23s;
   top: 52%;
   left: 5%;
   width: calc(85 * var(--u));
   height: calc(85 * var(--u));
   background: radial-gradient(circle, var(--field-c) 0%, transparent 66%);
-  animation-delay: -60s;
+  animation-delay:
+    -25s,
+    -4s;
 }
 
 .field:nth-child(4) {
-  --duration: 470s;
+  animation-name: flow-d, breathe;
+  --duration: 110s;
+  --breath: 31s;
   top: 62%;
   left: 55%;
   width: calc(70 * var(--u));
   height: calc(70 * var(--u));
   background: radial-gradient(circle, var(--field-d) 0%, transparent 66%);
-  animation-delay: -200s;
+  animation-delay:
+    -60s,
+    -15s;
 }
 
 .field:nth-child(5) {
-  --duration: 230s;
+  animation-name: flow-e, breathe;
+  --duration: 60s;
+  --breath: 17s;
+  --o: 0.8;
   top: -6%;
   left: 30%;
   width: calc(55 * var(--u));
   height: calc(55 * var(--u));
   background: radial-gradient(circle, var(--field-e) 0%, transparent 66%);
-  opacity: 0.8;
-  animation-delay: -90s;
+  animation-delay:
+    -30s,
+    -6s;
 }
 
-@keyframes drift {
+.field:nth-child(6) {
+  animation-name: flow-c, breathe;
+  --duration: 88s;
+  --breath: 29s;
+  --o: 0.7;
+  top: 34%;
+  left: 20%;
+  width: calc(60 * var(--u));
+  height: calc(60 * var(--u));
+  background: radial-gradient(circle, var(--field-d) 0%, transparent 64%);
+  animation-delay:
+    -70s,
+    -20s;
+  animation-direction: alternate-reverse, alternate;
+}
+
+.field:nth-child(7) {
+  animation-name: flow-a, breathe;
+  --duration: 101s;
+  --breath: 21s;
+  --o: 0.45;
+  top: 76%;
+  left: -10%;
+  width: calc(65 * var(--u));
+  height: calc(65 * var(--u));
+  background: radial-gradient(circle, var(--field-b) 0%, transparent 64%);
+  animation-delay:
+    -15s,
+    -11s;
+  animation-direction: alternate-reverse, alternate;
+}
+
+@keyframes flow-a {
   0% {
     transform: translate(0, 0) scale(1) rotate(0deg);
   }
-  50% {
-    transform: translate(9cqw, -6cqh) scale(1.18) rotate(25deg);
+  33% {
+    transform: translate(22cqw, 14cqh) scale(1.35) rotate(40deg);
+  }
+  66% {
+    transform: translate(-8cqw, 26cqh) scale(0.85) rotate(-20deg);
   }
   100% {
-    transform: translate(-7cqw, 5cqh) scale(0.92) rotate(-15deg);
+    transform: translate(18cqw, -6cqh) scale(1.2) rotate(15deg);
+  }
+}
+
+@keyframes flow-b {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-30cqw, 10cqh) scale(0.8) rotate(-35deg);
+  }
+  66% {
+    transform: translate(-12cqw, -18cqh) scale(1.3) rotate(20deg);
+  }
+  100% {
+    transform: translate(-36cqw, -4cqh) scale(1.05) rotate(-10deg);
+  }
+}
+
+@keyframes flow-c {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(26cqw, -20cqh) scale(1.25) rotate(30deg);
+  }
+  66% {
+    transform: translate(40cqw, 4cqh) scale(0.9) rotate(-25deg);
+  }
+  100% {
+    transform: translate(10cqw, -30cqh) scale(1.15) rotate(10deg);
+  }
+}
+
+@keyframes flow-d {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-24cqw, -26cqh) scale(1.4) rotate(-30deg);
+  }
+  66% {
+    transform: translate(-40cqw, -6cqh) scale(0.95) rotate(25deg);
+  }
+  100% {
+    transform: translate(-14cqw, -36cqh) scale(1.1) rotate(-5deg);
+  }
+}
+
+@keyframes flow-e {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-20cqw, 24cqh) scale(1.3) rotate(35deg);
+  }
+  66% {
+    transform: translate(16cqw, 34cqh) scale(0.9) rotate(-15deg);
+  }
+  100% {
+    transform: translate(-6cqw, 16cqh) scale(1.2) rotate(20deg);
+  }
+}
+
+@keyframes breathe {
+  from {
+    opacity: var(--o);
+  }
+  to {
+    opacity: calc(var(--o) * 0.55);
   }
 }
 

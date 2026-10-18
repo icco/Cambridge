@@ -1,7 +1,8 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 permissions:
@@ -26,6 +27,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      - run: pnpm test
       - run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: "1"

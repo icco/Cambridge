@@ -1,7 +1,13 @@
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 
-import { handAngles, isoDate, msUntilNextSecond, zonedTime } from "./time.ts"
+import {
+  handAngles,
+  isoDate,
+  msUntilNextSecond,
+  writtenDate,
+  zonedTime,
+} from "./time.ts"
 
 describe("zonedTime", () => {
   it("reads midnight as hour 0", () => {
@@ -58,6 +64,22 @@ describe("isoDate", () => {
     const instant = new Date("2026-10-18T14:00:00Z")
     assert.equal(isoDate(instant, "Europe/London"), "2026-10-18")
     assert.equal(isoDate(instant, "Australia/Sydney"), "2026-10-19")
+  })
+})
+
+describe("writtenDate", () => {
+  it("spells out the zone's date month first", () => {
+    assert.deepEqual(
+      writtenDate(new Date("2026-10-18T14:00:00Z"), "Europe/London"),
+      { weekday: "Sunday", date: "October 18, 2026" }
+    )
+  })
+
+  it("rolls over at London midnight, not UTC", () => {
+    assert.equal(
+      writtenDate(new Date("2026-10-18T23:30:00Z"), "Europe/London").weekday,
+      "Monday"
+    )
   })
 })
 

@@ -5,16 +5,16 @@
     var(--face-day) calc(var(--d) * 100%),
     var(--face-night)
   );
-  --mark: color-mix(
-    in oklab,
-    var(--ink-day) calc(var(--d) * 100%),
-    var(--ink-night)
-  );
+  --mark: var(--ink-day);
   aspect-ratio: 1;
   border-radius: 50%;
   box-shadow:
     0 2.2cqw 5cqw rgb(27 31 59 / 0.22),
     0 0.4cqw 1cqw rgb(27 31 59 / 0.12);
+}
+
+.night {
+  --mark: var(--ink-night);
 }
 
 .clock svg {

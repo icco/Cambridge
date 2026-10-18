@@ -34,10 +34,12 @@ export function Clock({
   const large = size === "large"
   const angles = handAngles(zonedTime(now, city.timeZone))
   const day = dayFactor(now, city.latitude, city.longitude)
+  // Hands switch rather than cross-fade, where navy and cream contrast equally with the fading face.
+  const night = day < 0.45
 
   return (
     <div
-      className={`${styles.clock} ${large ? styles.large : styles.small}`}
+      className={`${styles.clock} ${large ? styles.large : styles.small} ${night ? styles.night : ""}`}
       style={{ "--d": day.toFixed(3) } as CSSProperties}
     >
       <svg viewBox="0 0 200 200" role="img" aria-label={city.name}>

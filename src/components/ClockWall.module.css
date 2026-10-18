@@ -1,0 +1,37 @@
+.wall {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 3.6cqh;
+  padding-block: 6cqh;
+}
+
+.home {
+  display: grid;
+  place-items: center;
+}
+
+.away {
+  position: relative;
+  align-self: center;
+  height: 63cqw;
+}
+
+.city {
+  position: absolute;
+  top: 0;
+}
+
+.city:nth-child(1) {
+  left: 5cqw;
+}
+
+.city:nth-child(2) {
+  top: 29cqw;
+  left: 33cqw;
+}
+
+.city:nth-child(3) {
+  left: 61cqw;
+}

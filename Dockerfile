@@ -5,9 +5,11 @@ WORKDIR /app
 FROM base AS deps
 RUN npm install --global pnpm@11.2.2
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-RUN --mount=type=secret,id=npm_token,env=NODE_AUTH_TOKEN,required=true \
+RUN --mount=type=secret,id=npm_token,required=true \
     --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile --store-dir=/pnpm/store
+    echo "//npm.pkg.github.com/:_authToken=$(cat /run/secrets/npm_token)" >> .npmrc && \
+    pnpm install --frozen-lockfile --store-dir=/pnpm/store && \
+    rm -f .npmrc
 
 FROM deps AS builder
 COPY . .

@@ -1,12 +1,12 @@
 {
-  "name": "nextjs-template",
+  "name": "cambridge",
   "version": "1.0.0",
-  "description": "A Next.js starter for icco projects.",
+  "description": "An analog world clock art piece for a portrait screen in London.",
   "private": true,
   "type": "module",
   "license": "MIT",
   "author": "Nat Welch <nat@natwelch.com>",
-  "repository": "https://github.com/icco/nextjs-template.git",
+  "repository": "https://github.com/icco/cambridge.git",
   "packageManager": "pnpm@11.2.2",
   "engines": {
     "node": ">=26"
@@ -21,7 +21,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "pnpm lint && pnpm type-check && pnpm format:check",
-    "test:smoke": "node scripts/smoke.mjs"
+    "test:smoke": "node scripts/smoke.mjs",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -29,7 +30,8 @@
     "jsdom": "^30.1.3",
     "next": "^16.4.2",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "suncalc": "^2.1.1"
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.1",

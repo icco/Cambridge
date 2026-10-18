@@ -1,13 +1,17 @@
 import "./globals.css"
 
-import { Footer } from "@icco/react-common/Footer"
-import { ThemeProvider } from "@icco/react-common/ThemeProvider"
 import { WebVitals } from "@icco/react-common/WebVitals"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
+import { Bricolage_Grotesque } from "next/font/google"
 import type { ReactNode } from "react"
 
-import { Header } from "@/components/Header"
 import { site } from "@/lib/site"
+
+const display = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -23,26 +27,20 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: site.name, description: site.description },
 }
 
+export const viewport: Viewport = { themeColor: "#e9e6f2" }
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col bg-base-100 font-sans text-base-content antialiased">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-base-100 focus:p-4"
+    <html lang="en" className={display.variable}>
+      <body className="flex min-h-dvh flex-col overflow-hidden bg-(--wall) font-sans text-(--ink-day) antialiased">
+        {site.analyticsPath && <WebVitals analyticsPath={site.analyticsPath} />}
+        <main
+          id="main"
+          tabIndex={-1}
+          className="grid flex-1 place-items-center"
         >
-          Skip to content
-        </a>
-        <ThemeProvider>
-          <Header />
-          {site.analyticsPath && (
-            <WebVitals analyticsPath={site.analyticsPath} />
-          )}
-          <main id="main" tabIndex={-1} className="flex-1">
-            {children}
-          </main>
-          <Footer sourceRepo={site.repository} {...site.footer} />
-        </ThemeProvider>
+          {children}
+        </main>
       </body>
     </html>
   )

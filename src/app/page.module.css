@@ -1,0 +1,7 @@
+.screen {
+  position: relative;
+  width: min(100vw, 100dvh * 9 / 16);
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  container-type: size;
+}

@@ -1,0 +1,96 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--wall);
+}
+
+.fields {
+  position: absolute;
+  inset: -20%;
+}
+
+/* Soft edges come from gradients, not filter: blur, to keep the Pi GPU idle. */
+.field {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  animation: drift var(--duration) ease-in-out infinite alternate;
+}
+
+.field:nth-child(1) {
+  --duration: 290s;
+  top: 2%;
+  left: -5%;
+  width: 75cqw;
+  height: 75cqw;
+  background: radial-gradient(circle, var(--field-a) 0%, transparent 68%);
+}
+
+.field:nth-child(2) {
+  --duration: 410s;
+  top: 18%;
+  left: 50%;
+  width: 90cqw;
+  height: 90cqw;
+  background: radial-gradient(circle, var(--field-b) 0%, transparent 66%);
+  opacity: 0.55;
+  animation-delay: -120s;
+}
+
+.field:nth-child(3) {
+  --duration: 350s;
+  top: 52%;
+  left: 5%;
+  width: 85cqw;
+  height: 85cqw;
+  background: radial-gradient(circle, var(--field-c) 0%, transparent 66%);
+  animation-delay: -60s;
+}
+
+.field:nth-child(4) {
+  --duration: 470s;
+  top: 62%;
+  left: 55%;
+  width: 70cqw;
+  height: 70cqw;
+  background: radial-gradient(circle, var(--field-d) 0%, transparent 66%);
+  animation-delay: -200s;
+}
+
+.field:nth-child(5) {
+  --duration: 230s;
+  top: -6%;
+  left: 30%;
+  width: 55cqw;
+  height: 55cqw;
+  background: radial-gradient(circle, var(--field-e) 0%, transparent 66%);
+  opacity: 0.8;
+  animation-delay: -90s;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(9cqw, -6cqh) scale(1.18) rotate(25deg);
+  }
+  100% {
+    transform: translate(-7cqw, 5cqh) scale(0.92) rotate(-15deg);
+  }
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.2 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field {
+    animation: none;
+  }
+}

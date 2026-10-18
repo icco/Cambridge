@@ -5,12 +5,24 @@
 @source inline("loading-{xs,sm,md,lg}");
 
 @plugin "daisyui" {
-  themes:
-    light --default,
-    dark --prefersdark;
+  themes: light --default;
 }
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --color-link: var(--color-primary);
+}
+
+:root {
+  --wall: #e9e6f2;
+  --field-a: #ff8a5c;
+  --field-b: #3d5afe;
+  --field-c: #7fd8be;
+  --field-d: #ffb7d5;
+  --field-e: #ffd166;
+  --face-day: #fbfaf7;
+  --face-night: #161b3d;
+  --ink-day: #1b1f3b;
+  --ink-night: #f2ebd9;
+  --second: #ff5a36;
 }

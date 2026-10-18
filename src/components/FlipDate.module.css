@@ -1,0 +1,81 @@
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.6cqw;
+  perspective: 60cqw;
+}
+
+.tile {
+  --pin: color-mix(in oklab, var(--face-night) 70%, black);
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 12.5cqw;
+  padding-inline: 2.4cqw;
+  border-radius: 1.1cqw;
+  background: linear-gradient(
+    color-mix(in oklab, var(--face-night) 88%, white) 0 50%,
+    var(--face-night) 50% 100%
+  );
+  color: var(--ink-night);
+  font-family: var(--font-display);
+  font-size: 7.6cqw;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-box: trim-both cap alphabetic;
+  box-shadow:
+    0 1cqw 2.2cqw rgb(27 31 59 / 0.22),
+    0 0.2cqw 0.5cqw rgb(27 31 59 / 0.15);
+}
+
+.tile::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.5cqw;
+  left: 0.5cqw;
+  height: 1.2cqw;
+  transform: translateY(-50%);
+  background:
+    radial-gradient(
+      circle at 0.6cqw 50%,
+      var(--pin) 0.55cqw,
+      transparent 0.6cqw
+    ),
+    radial-gradient(
+      circle at calc(100% - 0.6cqw) 50%,
+      var(--pin) 0.55cqw,
+      transparent 0.6cqw
+    );
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 0.16cqw;
+  transform: translateY(-50%);
+  background: var(--pin);
+  opacity: 0.85;
+}
+
+.flip {
+  animation: flip 0.6s ease-in-out;
+}
+
+@keyframes flip {
+  50% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip {
+    animation: none;
+  }
+}

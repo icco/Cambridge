@@ -81,6 +81,15 @@
   }
 }
 
+/* A flat overlay dims the wall and fields together without per-frame filter work. */
+.dusk {
+  position: absolute;
+  inset: 0;
+  background: var(--dusk);
+  opacity: calc((1 - var(--day)) * 0.7);
+  transition: opacity 60s linear;
+}
+
 .grain {
   position: absolute;
   inset: 0;
@@ -92,5 +101,9 @@
 @media (prefers-reduced-motion: reduce) {
   .field {
     animation: none;
+  }
+
+  .dusk {
+    transition: none;
   }
 }

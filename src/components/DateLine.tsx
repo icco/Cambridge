@@ -16,6 +16,7 @@ export function DateLine({ now }: { now: Date }) {
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>
+    let disposed = false
 
     const load = async () => {
       try {
@@ -24,16 +25,19 @@ export function DateLine({ now }: { now: Date }) {
         if (!response.ok) {
           throw new Error(body.error ?? `weather returned ${response.status}`)
         }
-        setWeather(body as Weather)
+        if (!disposed) setWeather(body as Weather)
       } catch (error) {
         // Keep showing the last reading; the next poll may succeed.
         console.error("weather update failed", error)
       }
-      timer = setTimeout(load, WEATHER_MS)
+      if (!disposed) timer = setTimeout(load, WEATHER_MS)
     }
 
     timer = setTimeout(load, 0)
-    return () => clearTimeout(timer)
+    return () => {
+      disposed = true
+      clearTimeout(timer)
+    }
   }, [])
 
   const { weekday, date } = writtenDate(now, home.timeZone)

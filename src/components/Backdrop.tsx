@@ -30,6 +30,12 @@ export function Backdrop() {
 
   return (
     <div className={styles.backdrop} aria-hidden="true">
+      {day !== null && (
+        <div
+          className={styles.dusk}
+          style={{ "--day": day } as CSSProperties}
+        />
+      )}
       <div className={styles.fields}>
         <div className={styles.field} />
         <div className={styles.field} />
@@ -41,7 +47,7 @@ export function Backdrop() {
       </div>
       {day !== null && (
         <div
-          className={styles.dusk}
+          className={styles.veil}
           style={{ "--day": day } as CSSProperties}
         />
       )}

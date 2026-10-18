@@ -32,13 +32,15 @@ function draw(canvas: HTMLCanvasElement, palette: Palette, now: Date) {
     throw new Error("2d canvas context unavailable")
   }
   const { clientWidth: width, clientHeight: height } = canvas
+  if (width === 0 || height === 0) return
   const pixelWidth = Math.max(1, Math.ceil(width * RESOLUTION))
   const pixelHeight = Math.max(1, Math.ceil(height * RESOLUTION))
   if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
     canvas.width = pixelWidth
     canvas.height = pixelHeight
   }
-  context.setTransform(RESOLUTION, 0, 0, RESOLUTION, 0, 0)
+  // Scale to the rounded-up backing size, not RESOLUTION, so the last pixel row and column are fully painted.
+  context.setTransform(pixelWidth / width, 0, 0, pixelHeight / height, 0, 0)
   const night = 1 - dayFactor(now, cambridge.latitude, cambridge.longitude)
   const seconds = now.getTime() / 1000
 

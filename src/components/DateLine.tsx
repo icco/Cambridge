@@ -28,7 +28,7 @@ export function DateLine({ now }: { now: Date }) {
         if (!disposed) setWeather(body as Weather)
       } catch (error) {
         // Keep showing the last reading; the next poll may succeed.
-        console.error("weather update failed", error)
+        if (!disposed) console.error("weather update failed", error)
       }
       if (!disposed) timer = setTimeout(load, WEATHER_MS)
     }

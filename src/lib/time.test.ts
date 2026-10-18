@@ -24,13 +24,11 @@ describe("zonedTime", () => {
 
   it("follows US daylight saving", () => {
     assert.equal(
-      zonedTime(new Date("2026-03-08T09:59:00Z"), "America/Los_Angeles")
-        .hours,
+      zonedTime(new Date("2026-03-08T09:59:00Z"), "America/Los_Angeles").hours,
       1
     )
     assert.equal(
-      zonedTime(new Date("2026-03-08T10:00:00Z"), "America/Los_Angeles")
-        .hours,
+      zonedTime(new Date("2026-03-08T10:00:00Z"), "America/Los_Angeles").hours,
       3
     )
     assert.equal(

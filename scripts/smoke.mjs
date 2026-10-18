@@ -49,35 +49,12 @@ try {
     /unsafe-eval/
   )
   const document = new JSDOM(await home.text()).window.document
-  assert.ok(document.querySelector("h1"))
+  assert.equal(document.title, "Cambridge Clock")
   assert.equal(document.querySelectorAll("main").length, 1)
   assert.ok(document.querySelector('main#main[tabindex="-1"]'))
-  assert.ok(document.querySelector('header a[aria-label$=" home"] svg'))
-  assert.ok(document.querySelector('header input[type="checkbox"]'))
-  assert.ok(document.querySelector('footer a[title="Source Code"]'))
-  assert.match(document.querySelector("footer").textContent, /Nat Welch/)
-  for (const theme of ["light", "dark"]) {
-    const themed = await fetch(base, { headers: { cookie: `theme=${theme}` } })
-    assert.equal(themed.status, 200)
-    const themedDom = new JSDOM(await themed.text(), {
-      url: base,
-      runScripts: "outside-only",
-      pretendToBeVisual: true,
-    })
-    themedDom.window.document.cookie = `theme=${theme}`
-    // Run only the pre-hydration theme script, not Next.js bootstrap scripts.
-    const themeScript = Array.from(
-      themedDom.window.document.querySelectorAll("script")
-    ).find((script) => script.textContent.includes('"data-theme"'))
-    assert.ok(themeScript, "Theme initialization is included in the response")
-    themedDom.window.eval(themeScript.textContent)
-    assert.equal(
-      themedDom.window.document.documentElement.getAttribute("data-theme"),
-      theme,
-      `The saved ${theme} preference is applied before hydration`
-    )
-    themedDom.window.close()
-  }
+  assert.ok(document.querySelector('main [aria-hidden="true"]'))
+  assert.equal(document.querySelector("header"), null)
+  assert.equal(document.querySelector("footer"), null)
   const health = await fetch(`${base}/healthz`)
   assert.deepEqual(await health.json(), { status: "ok" })
   assert.equal(health.headers.get("cache-control"), "no-store")
@@ -92,8 +69,6 @@ try {
   assert.equal(missing.status, 404)
   const missingDocument = new JSDOM(await missing.text()).window.document
   assert.equal(missingDocument.querySelectorAll("main").length, 1)
-  assert.ok(missingDocument.querySelector("header"))
-  assert.ok(missingDocument.querySelector("footer"))
   console.log("Production smoke checks passed.")
 } finally {
   if (server && server.exitCode === null) {

@@ -1,56 +1,114 @@
 "use client"
 
-import { type CSSProperties, useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 
 import { cambridge } from "@/lib/cities"
 import { dayFactor } from "@/lib/daylight"
+import { fields, fieldState } from "@/lib/fields"
 
 import styles from "./Backdrop.module.css"
 
-const MINUTE_MS = 60 * 1000
+// The whole backdrop is one small canvas stretched to the viewport, so its GPU memory stays flat at any screen size; the soft gradients survive the upscale.
+const RESOLUTION = 1 / 8
+const FRAME_MS = 1000 / 30
+const STILL_MS = 60 * 1000
+// At night the wall goes deep under the fields so they glow, and a lighter veil over them tones them down.
+const NIGHT_DUSK = 0.85
+const NIGHT_VEIL = 0.3
 
-function cambridgeDay() {
-  return dayFactor(new Date(), cambridge.latitude, cambridge.longitude)
+type Palette = { wall: string; dusk: string; fields: string[] }
+
+function token(style: CSSStyleDeclaration, name: string): string {
+  const color = style.getPropertyValue(name).trim()
+  if (!/^#[0-9a-f]{6}$/i.test(color)) {
+    throw new Error(`${name} must be a #rrggbb colour, got "${color}"`)
+  }
+  return color
+}
+
+function draw(canvas: HTMLCanvasElement, palette: Palette, now: Date) {
+  const context = canvas.getContext("2d")
+  if (!context) {
+    throw new Error("2d canvas context unavailable")
+  }
+  const { clientWidth: width, clientHeight: height } = canvas
+  const pixelWidth = Math.max(1, Math.ceil(width * RESOLUTION))
+  const pixelHeight = Math.max(1, Math.ceil(height * RESOLUTION))
+  if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+    canvas.width = pixelWidth
+    canvas.height = pixelHeight
+  }
+  context.setTransform(RESOLUTION, 0, 0, RESOLUTION, 0, 0)
+  const night = 1 - dayFactor(now, cambridge.latitude, cambridge.longitude)
+  const seconds = now.getTime() / 1000
+
+  context.globalAlpha = 1
+  context.fillStyle = palette.wall
+  context.fillRect(0, 0, width, height)
+  context.globalAlpha = night * NIGHT_DUSK
+  context.fillStyle = palette.dusk
+  context.fillRect(0, 0, width, height)
+
+  fields.forEach((field, i) => {
+    const { x, y, radius, alpha } = fieldState(field, seconds, width, height)
+    const gradient = context.createRadialGradient(x, y, 0, x, y, radius)
+    gradient.addColorStop(0, palette.fields[i])
+    gradient.addColorStop(1, `${palette.fields[i]}00`)
+    context.globalAlpha = alpha
+    context.fillStyle = gradient
+    context.fillRect(x - radius, y - radius, radius * 2, radius * 2)
+  })
+
+  context.globalAlpha = night * NIGHT_VEIL
+  context.fillStyle = palette.dusk
+  context.fillRect(0, 0, width, height)
 }
 
 export function Backdrop() {
-  const [day, setDay] = useState<number | null>(null)
+  const canvas = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>
+    const element = canvas.current
+    if (!element) return
+    const style = getComputedStyle(document.documentElement)
+    const palette: Palette = {
+      wall: token(style, "--wall"),
+      dusk: token(style, "--dusk"),
+      fields: fields.map((field) => token(style, field.color)),
+    }
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+    let frame = 0
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let last = -Infinity
 
-    const update = () => {
-      setDay(cambridgeDay())
-      timer = setTimeout(update, MINUTE_MS)
+    const render = (now: number) => {
+      if (now - last >= FRAME_MS) {
+        last = now
+        draw(element, palette, new Date())
+      }
+      if (still) {
+        timer = setTimeout(() => render(performance.now()), STILL_MS)
+      } else {
+        frame = requestAnimationFrame(render)
+      }
     }
 
-    timer = setTimeout(update, 0)
-    return () => clearTimeout(timer)
+    frame = requestAnimationFrame(render)
+    const resize = new ResizeObserver(() => {
+      last = -Infinity
+      if (still) draw(element, palette, new Date())
+    })
+    resize.observe(element)
+    return () => {
+      cancelAnimationFrame(frame)
+      clearTimeout(timer)
+      resize.disconnect()
+    }
   }, [])
 
   return (
     <div className={styles.backdrop} aria-hidden="true">
-      {day !== null && (
-        <div
-          className={styles.dusk}
-          style={{ "--day": day } as CSSProperties}
-        />
-      )}
-      <div className={styles.fields}>
-        <div className={styles.field} />
-        <div className={styles.field} />
-        <div className={styles.field} />
-        <div className={styles.field} />
-        <div className={styles.field} />
-        <div className={styles.field} />
-        <div className={styles.field} />
-      </div>
-      {day !== null && (
-        <div
-          className={styles.veil}
-          style={{ "--day": day } as CSSProperties}
-        />
-      )}
+      <canvas ref={canvas} className={styles.canvas} />
       <div className={styles.grain} />
     </div>
   )

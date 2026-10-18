@@ -51,6 +51,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+          secrets: |
+            npm_token=${{ secrets.GITHUB_TOKEN }}
       - name: Export digest
         run: |
           mkdir -p ${{ runner.temp }}/digests

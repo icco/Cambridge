@@ -1,3 +1,5 @@
+import { fetchWeatherApi } from "openmeteo"
+
 export type Weather = { temperature: number; description: string }
 
 // WMO weather interpretation codes, as listed in https://open-meteo.com/en/docs
@@ -48,23 +50,21 @@ export async function fetchWeather(
   latitude: number,
   longitude: number
 ): Promise<Weather> {
-  const url = new URL("https://api.open-meteo.com/v1/forecast")
-  url.search = new URLSearchParams({
-    latitude: String(latitude),
-    longitude: String(longitude),
-    current: "temperature_2m,weather_code",
-    temperature_unit: "fahrenheit",
-  }).toString()
-
-  const response = await fetch(url, { cache: "no-store" })
-  if (!response.ok) {
-    throw new Error(`open-meteo returned ${response.status}`)
-  }
-  const { current } = (await response.json()) as {
-    current: { temperature_2m: number; weather_code: number }
+  const [response] = await fetchWeatherApi(
+    "https://api.open-meteo.com/v1/forecast",
+    {
+      latitude,
+      longitude,
+      current: "temperature_2m,weather_code",
+      temperature_unit: "fahrenheit",
+    }
+  )
+  const current = response.current()
+  if (!current) {
+    throw new Error("open-meteo returned no current conditions")
   }
   return {
-    temperature: current.temperature_2m,
-    description: describeWeather(current.weather_code),
+    temperature: current.variables(0)!.value(),
+    description: describeWeather(current.variables(1)!.value()),
   }
 }

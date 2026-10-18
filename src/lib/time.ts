@@ -17,6 +17,21 @@ export function isoDate(date: Date, timeZone: string): string {
   return zoned(date, timeZone).toPlainDate().toString()
 }
 
+export function writtenDate(
+  date: Date,
+  timeZone: string
+): { weekday: string; date: string } {
+  const zonedDate = zoned(date, timeZone)
+  return {
+    weekday: zonedDate.toLocaleString("en-US", { weekday: "long" }),
+    date: zonedDate.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }),
+  }
+}
+
 export function handAngles({ hours, minutes, seconds }: ClockTime): HandAngles {
   return {
     hour: (hours % 12) * 30 + minutes * 0.5,

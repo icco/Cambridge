@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 
 import { away, home } from "@/lib/cities"
-import { isoDate, msUntilNextSecond, zonedTime } from "@/lib/time"
+import { msUntilNextSecond, zonedTime } from "@/lib/time"
 
 import { Clock } from "./Clock"
 import styles from "./ClockWall.module.css"
-import { FlipDate } from "./FlipDate"
+import { DateLine } from "./DateLine"
 
 const RELOAD_HOUR = 4
 const HOUR_MS = 60 * 60 * 1000
@@ -41,7 +41,7 @@ export function ClockWall() {
     <div className={styles.wall}>
       {now && (
         <>
-          <FlipDate iso={isoDate(now, home.timeZone)} />
+          <DateLine now={now} />
           <div className={styles.home}>
             <Clock city={home} now={now} size="large" />
           </div>

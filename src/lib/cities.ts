@@ -36,6 +36,6 @@ export const away: City[] = [
 export const cambridge: City = {
   name: "Cambridge",
   timeZone: "Europe/London",
-  latitude: 52.205,
-  longitude: 0.119,
+  latitude: 52.2165,
+  longitude: 0.1091,
 }

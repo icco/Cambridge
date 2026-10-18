@@ -1,11 +1,14 @@
 .backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  container-type: size;
   overflow: hidden;
   background: var(--wall);
 }
 
+/* Sized against the 9:16 frame width, growing with the viewport on wider screens. */
 .fields {
+  --u: max(1cqw, 0.5625cqh);
   position: absolute;
   inset: -20%;
 }
@@ -22,8 +25,8 @@
   --duration: 290s;
   top: 2%;
   left: -5%;
-  width: 75cqw;
-  height: 75cqw;
+  width: calc(75 * var(--u));
+  height: calc(75 * var(--u));
   background: radial-gradient(circle, var(--field-a) 0%, transparent 68%);
 }
 
@@ -31,8 +34,8 @@
   --duration: 410s;
   top: 18%;
   left: 50%;
-  width: 90cqw;
-  height: 90cqw;
+  width: calc(90 * var(--u));
+  height: calc(90 * var(--u));
   background: radial-gradient(circle, var(--field-b) 0%, transparent 66%);
   opacity: 0.55;
   animation-delay: -120s;
@@ -42,8 +45,8 @@
   --duration: 350s;
   top: 52%;
   left: 5%;
-  width: 85cqw;
-  height: 85cqw;
+  width: calc(85 * var(--u));
+  height: calc(85 * var(--u));
   background: radial-gradient(circle, var(--field-c) 0%, transparent 66%);
   animation-delay: -60s;
 }
@@ -52,8 +55,8 @@
   --duration: 470s;
   top: 62%;
   left: 55%;
-  width: 70cqw;
-  height: 70cqw;
+  width: calc(70 * var(--u));
+  height: calc(70 * var(--u));
   background: radial-gradient(circle, var(--field-d) 0%, transparent 66%);
   animation-delay: -200s;
 }
@@ -62,8 +65,8 @@
   --duration: 230s;
   top: -6%;
   left: 30%;
-  width: 55cqw;
-  height: 55cqw;
+  width: calc(55 * var(--u));
+  height: calc(55 * var(--u));
   background: radial-gradient(circle, var(--field-e) 0%, transparent 66%);
   opacity: 0.8;
   animation-delay: -90s;

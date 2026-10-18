@@ -9,9 +9,11 @@ export const metadata: Metadata = { alternates: { canonical: "/" } }
 
 export default function Home() {
   return (
-    <div className={styles.screen}>
+    <>
       <Backdrop />
-      <ClockWall />
-    </div>
+      <div className={styles.screen}>
+        <ClockWall />
+      </div>
+    </>
   )
 }

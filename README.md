@@ -8,6 +8,7 @@ An analog world clock art piece for a 27" portrait screen in London. It shows Lo
 nvm use
 npm install --global pnpm@11.2.2
 export NODE_AUTH_TOKEN="$(gh auth token)"
+printf '%s\n' '//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}' >> ~/.npmrc
 pnpm install --frozen-lockfile
 ```
 
